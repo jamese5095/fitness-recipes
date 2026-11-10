@@ -1,16 +1,16 @@
 const cards = [...document.querySelectorAll('.recipe-card')];
-const buttons = [...document.querySelectorAll('[data-filter]')];
-const versionButtons = [...document.querySelectorAll('[data-version-filter]')];
+const categoryButtons = [...document.querySelectorAll('[data-filter]')];
+const methodButtons = [...document.querySelectorAll('[data-method-filter]')];
 const input = document.querySelector('input[type="search"]');
 let category = '全部';
-let version = '全部';
+let method = '全部';
 
 function updateMenu() {
   const query = input.value.trim().toLocaleLowerCase();
   let count = 0;
   for (const card of cards) {
     const matches = (category === '全部' || card.dataset.category === category)
-      && (version === '全部' || card.dataset.version === version)
+      && (method === '全部' || card.dataset.method === method)
       && card.dataset.search.toLocaleLowerCase().includes(query);
     card.hidden = !matches;
     if (matches) count++;
@@ -19,21 +19,22 @@ function updateMenu() {
   document.querySelector('.empty').hidden = count > 0;
 }
 
-for (const button of versionButtons) {
+for (const button of categoryButtons) {
   button.addEventListener('click', () => {
-    version = button.dataset.versionFilter;
-    versionButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    category = button.dataset.filter;
+    categoryButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
     updateMenu();
   });
 }
 
-for (const button of buttons) {
+for (const button of methodButtons) {
   button.addEventListener('click', () => {
-    category = button.dataset.filter;
-    buttons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    method = button.dataset.methodFilter;
+    methodButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
     updateMenu();
   });
 }
+
 input.addEventListener('input', updateMenu);
 document.querySelectorAll('.filters').forEach(group => { group.hidden = false; });
 document.querySelector('.search').hidden = false;
